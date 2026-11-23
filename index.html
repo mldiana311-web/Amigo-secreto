@@ -1,1 +1,966 @@
-amigo_secreto.html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amigo Secreto Confidencial</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --ink: #18202c;
+      --muted: #5c687a;
+      --accent: #1d6f5c;
+      --accent-hover: #155647;
+      --accent-soft: #e7f3ef;
+      --border: #dfe4ec;
+      --danger: #b42318;
+      --danger-soft: #fef3f2;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      padding: 20px 14px 48px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(24, 32, 44, 0.04);
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.5rem;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    p {
+      margin: 0 0 10px;
+      color: var(--muted);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(24, 32, 44, 0.04);
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      flex: 1;
+      min-width: 180px;
+      padding: 11px 13px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    input:focus {
+      outline: 2px solid var(--accent-soft);
+      border-color: var(--accent);
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 15px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, opacity 0.15s ease;
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    button.primary:hover {
+      background: var(--accent-hover);
+    }
+
+    button.secondary {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    button.secondary:hover {
+      background: #d6eae3;
+    }
+
+    button.ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    button.ghost:hover {
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    button.danger {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+    }
+
+    .chip button {
+      padding: 0 4px;
+      font-size: 1rem;
+      line-height: 1;
+      background: none;
+      color: var(--muted);
+    }
+
+    .chip button:hover {
+      color: var(--danger);
+    }
+
+    .alert {
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-top: 12px;
+      font-size: 0.92rem;
+    }
+
+    .alert.error {
+      background: var(--danger-soft);
+      color: var(--danger);
+      border: 1px solid #fecdca;
+    }
+
+    .alert.ok {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid #b8dfd3;
+    }
+
+    .participant-box {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+      background: #fcfcfd;
+    }
+
+    .participant-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .participant-name {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .pin-area {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .pin-inputs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .pin-inputs input {
+      max-width: 150px;
+      min-width: 120px;
+      letter-spacing: 0.2em;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .reveal-box {
+      margin-top: 12px;
+      padding: 16px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      border: 1px solid #a9d6c7;
+      text-align: center;
+    }
+
+    .reveal-target {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin: 6px 0 12px;
+    }
+
+    .link-preview {
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      word-break: break-all;
+      background: var(--bg);
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+
+    .muted-small {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎁 Amigo Secreto Confidencial</h1>
+      <p>
+        Sorteo privado sin listas públicas. Cada participante protege su resultado con un
+        <strong>PIN de 4 dígitos</strong> y puede abrir su <strong>enlace privado</strong> por WhatsApp.
+      </p>
+    </header>
+
+    <!-- Vista cuando se abre un enlace privado (#to=...) -->
+    <section id="privateLinkView" class="card hidden">
+      <h2>Acceso privado por enlace</h2>
+      <p id="privateGreeting">Esta asignación está protegida con PIN de 4 dígitos.</p>
+
+      <div id="privateSetupBox" class="pin-area hidden">
+        <p class="muted-small">
+          Primera vez aquí: crea y confirma tu <strong>PIN secreto de 4 números</strong>. Solo tú conocerás este PIN.
+        </p>
+        <div class="pin-inputs">
+          <input id="privPin1" type="password" inputmode="numeric" maxlength="4" pattern="\d{4}" placeholder="PIN (4)" aria-label="Crear PIN de 4 dígitos" />
+          <input id="privPin2" type="password" inputmode="numeric" maxlength="4" pattern="\d{4}" placeholder="Confirmar" aria-label="Confirmar PIN de 4 dígitos" />
+          <button id="privSavePinBtn" class="primary" type="button">Guardar PIN y ver</button>
+        </div>
+      </div>
+
+      <div id="privateUnlockBox" class="pin-area hidden">
+        <p class="muted-small">Ingresa tu PIN de 4 dígitos para revelar a quién te tocó regalar.</p>
+        <div class="pin-inputs">
+          <input id="privUnlockPin" type="password" inputmode="numeric" maxlength="4" pattern="\d{4}" placeholder="Tu PIN" aria-label="Ingresar PIN de 4 dígitos" />
+          <button id="privUnlockBtn" class="primary" type="button">Ver mi Amigo Secreto</button>
+        </div>
+      </div>
+
+      <div id="privateRevealBox" class="reveal-box hidden">
+        <div class="muted-small">Te tocó regalarle a:</div>
+        <div id="privateTargetName" class="reveal-target"></div>
+        <button id="privLockBtn" class="secondary" type="button">Ocultar y bloquear de nuevo</button>
+      </div>
+
+      <div id="privateMsg" class="alert hidden"></div>
+
+      <div style="margin-top: 16px;">
+        <button id="goOrganizerBtn" class="ghost" type="button">Ir al organizador del sorteo</button>
+      </div>
+    </section>
+
+    <!-- Vista principal del organizador -->
+    <section id="organizerView">
+      <div class="card">
+        <h2>1. Participantes (mínimo 3)</h2>
+        <p class="muted-small">Agrega los nombres y luego toca <strong>Sortear parejas</strong>. No hay vista general ni tabla de resultados.</p>
+        <div class="row" style="margin-top: 10px;">
+          <input id="nameInput" type="text" placeholder="Escribe un nombre y presiona Agregar" autocomplete="off" />
+          <button id="addNameBtn" class="primary" type="button">Agregar</button>
+        </div>
+        <div id="chipsContainer" class="chips"></div>
+        <div id="setupMsg" class="alert hidden"></div>
+
+        <div class="row" style="margin-top: 16px;">
+          <button id="drawBtn" class="primary" type="button">Sortear parejas</button>
+          <button id="resetAllBtn" class="danger" type="button">Reiniciar todo</button>
+        </div>
+      </div>
+
+      <div id="assignmentsCard" class="card hidden">
+        <h2>2. Tarjetas privadas y enlaces para WhatsApp</h2>
+        <p class="muted-small">
+          Cada persona crea su propio <strong>PIN de 4 dígitos</strong> antes de ver su tarjeta, o bien puedes copiar su <strong>enlace privado</strong> para enviárselo por WhatsApp.
+        </p>
+        <div id="participantsList"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "amigo_secreto_state_v1";
+      const PIN_STORAGE_KEY = "amigo_secreto_pins_v1";
+
+      const state = {
+        participants: [],
+        assignments: {} // giver -> receiver
+      };
+
+      let pins = loadPins();
+
+      const nameInput = document.getElementById("nameInput");
+      const addNameBtn = document.getElementById("addNameBtn");
+      const chipsContainer = document.getElementById("chipsContainer");
+      const setupMsg = document.getElementById("setupMsg");
+      const drawBtn = document.getElementById("drawBtn");
+      const resetAllBtn = document.getElementById("resetAllBtn");
+      const assignmentsCard = document.getElementById("assignmentsCard");
+      const participantsList = document.getElementById("participantsList");
+
+      const privateLinkView = document.getElementById("privateLinkView");
+      const organizerView = document.getElementById("organizerView");
+      const privateGreeting = document.getElementById("privateGreeting");
+      const privateSetupBox = document.getElementById("privateSetupBox");
+      const privateUnlockBox = document.getElementById("privateUnlockBox");
+      const privateRevealBox = document.getElementById("privateRevealBox");
+      const privateTargetName = document.getElementById("privateTargetName");
+      const privateMsg = document.getElementById("privateMsg");
+      const privPin1 = document.getElementById("privPin1");
+      const privPin2 = document.getElementById("privPin2");
+      const privSavePinBtn = document.getElementById("privSavePinBtn");
+      const privUnlockPin = document.getElementById("privUnlockPin");
+      const privUnlockBtn = document.getElementById("privUnlockBtn");
+      const privLockBtn = document.getElementById("privLockBtn");
+      const goOrganizerBtn = document.getElementById("goOrganizerBtn");
+
+      // Estado en memoria (nunca revelado en vistas públicas)
+      const unlockedParticipants = new Set();
+      let activePrivatePayload = null;
+
+      function loadPins() {
+        try {
+          const raw = localStorage.getItem(PIN_STORAGE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (_) {
+          return {};
+        }
+      }
+
+      function savePins() {
+        try {
+          localStorage.setItem(PIN_STORAGE_KEY, JSON.stringify(pins));
+        } catch (_) {}
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed.participants)) {
+            state.participants = parsed.participants.filter((n) => typeof n === "string" && n.trim());
+          }
+          if (parsed.assignments && typeof parsed.assignments === "object") {
+            state.assignments = parsed.assignments;
+          }
+        } catch (_) {}
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (_) {}
+      }
+
+      function showMessage(el, text, type) {
+        el.textContent = text;
+        el.className = "alert " + type;
+        el.classList.remove("hidden");
+      }
+
+      function hideMessage(el) {
+        el.textContent = "";
+        el.className = "alert hidden";
+      }
+
+      function isValidPin(pin) {
+        return /^\d{4}$/.test(pin);
+      }
+
+      // Hash ligero determinístico para validar PIN sin guardar el número en texto plano
+      function hashPin(pin, salt) {
+        const input = String(salt || "") + "::" + String(pin);
+        let h1 = 0x811c9dc5;
+        let h2 = 0x01000193;
+        for (let i = 0; i < input.length; i++) {
+          const code = input.charCodeAt(i);
+          h1 ^= code;
+          h1 = Math.imul(h1, 0x01000193);
+          h2 ^= code + i;
+          h2 = Math.imul(h2, 0x85ebca6b);
+        }
+        return (h1 >>> 0).toString(16).padStart(8, "0") + (h2 >>> 0).toString(16).padStart(8, "0");
+      }
+
+      // Codificación segura UTF-8 -> Base64URL para enlaces privados
+      function encodePayload(obj) {
+        const json = JSON.stringify(obj);
+        const bytes = new TextEncoder().encode(json);
+        let bin = "";
+        for (let i = 0; i < bytes.length; i++) {
+          bin += String.fromCharCode(bytes[i]);
+        }
+        return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+      }
+
+      function decodePayload(token) {
+        try {
+          let b64 = token.replace(/-/g, "+").replace(/_/g, "/");
+          while (b64.length % 4) b64 += "=";
+          const bin = atob(b64);
+          const bytes = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) {
+            bytes[i] = bin.charCodeAt(i);
+          }
+          const json = new TextDecoder().decode(bytes);
+          const data = JSON.parse(json);
+          if (data && typeof data.g === "string" && typeof data.r === "string" && data.g && data.r && data.g !== data.r) {
+            return { giver: data.g, receiver: data.r };
+          }
+          return null;
+        } catch (_) {
+          return null;
+        }
+      }
+
+      function buildPrivateUrl(giver, receiver) {
+        const base = window.location.href.split("#")[0];
+        const token = encodePayload({ g: giver, r: receiver, v: 1 });
+        return base + "#to=" + token;
+      }
+
+      function shuffleArray(arr) {
+        const copy = arr.slice();
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      // Genera un emparejamiento sin autoasignación y sin parejas recíprocas directas (A <-> B) cuando n >= 3
+      function generateFairDraw(names) {
+        const n = names.length;
+        if (n < 3) return null;
+
+        for (let attempt = 0; attempt < 500; attempt++) {
+          const receivers = shuffleArray(names);
+          let ok = true;
+          const map = {};
+
+          for (let i = 0; i < n; i++) {
+            const giver = names[i];
+            const receiver = receivers[i];
+
+            if (giver === receiver) {
+              ok = false;
+              break;
+            }
+            map[giver] = receiver;
+          }
+
+          if (!ok) continue;
+
+          // Evitar parejas cruzadas/recíprocas directas: si A -> B, entonces B no puede -> A
+          for (let i = 0; i < n; i++) {
+            const a = names[i];
+            const b = map[a];
+            if (map[b] === a) {
+              ok = false;
+              break;
+            }
+          }
+
+          if (ok) return map;
+        }
+
+        // Respaldo determinístico cíclico con desplazamiento >= 2 cuando n >= 4
+        if (n >= 4) {
+          const rotated = shuffleArray(names);
+          const map = {};
+          for (let i = 0; i < n; i++) {
+            map[rotated[i]] = rotated[(i + 2) % n];
+          }
+          return map;
+        }
+
+        return null;
+      }
+
+      function addParticipant() {
+        const raw = nameInput.value.trim();
+        hideMessage(setupMsg);
+
+        if (!raw) {
+          showMessage(setupMsg, "Escribe un nombre antes de agregar.", "error");
+          nameInput.focus();
+          return;
+        }
+
+        const exists = state.participants.some((p) => p.toLowerCase() === raw.toLowerCase());
+        if (exists) {
+          showMessage(setupMsg, "Ese nombre ya está en la lista.", "error");
+          nameInput.focus();
+          return;
+        }
+
+        state.participants.push(raw);
+        state.assignments = {};
+        unlockedParticipants.clear();
+        nameInput.value = "";
+        saveState();
+        renderOrganizer();
+        nameInput.focus();
+      }
+
+      function removeParticipant(index) {
+        hideMessage(setupMsg);
+        state.participants.splice(index, 1);
+        state.assignments = {};
+        unlockedParticipants.clear();
+        saveState();
+        renderOrganizer();
+      }
+
+      function performDraw() {
+        hideMessage(setupMsg);
+        if (state.participants.length < 3) {
+          showMessage(setupMsg, "Necesitas al menos 3 participantes para hacer el sorteo sin parejas cruzadas.", "error");
+          return;
+        }
+
+        const result = generateFairDraw(state.participants);
+        if (!result) {
+          showMessage(setupMsg, "No se pudo generar el sorteo. Intenta de nuevo.", "error");
+          return;
+        }
+
+        state.assignments = result;
+        unlockedParticipants.clear();
+        saveState();
+        renderOrganizer();
+        showMessage(setupMsg, "Sorteo listo. Cada participante puede configurar su PIN de 4 dígitos o abrir su enlace privado.", "ok");
+      }
+
+      function resetAll() {
+        state.participants = [];
+        state.assignments = {};
+        pins = {};
+        unlockedParticipants.clear();
+        saveState();
+        savePins();
+        hideMessage(setupMsg);
+        renderOrganizer();
+      }
+
+      function renderChips() {
+        chipsContainer.innerHTML = "";
+        if (state.participants.length === 0) {
+          const empty = document.createElement("span");
+          empty.className = "muted-small";
+          empty.textContent = "Aún no has agregado participantes.";
+          chipsContainer.appendChild(empty);
+          return;
+        }
+
+        state.participants.forEach((name, idx) => {
+          const chip = document.createElement("span");
+          chip.className = "chip";
+
+          const label = document.createElement("span");
+          label.textContent = name;
+
+          const delBtn = document.createElement("button");
+          delBtn.type = "button";
+          delBtn.setAttribute("aria-label", "Quitar a " + name);
+          delBtn.textContent = "×";
+          delBtn.addEventListener("click", () => removeParticipant(idx));
+
+          chip.appendChild(label);
+          chip.appendChild(delBtn);
+          chipsContainer.appendChild(chip);
+        });
+      }
+
+      function renderAssignments() {
+        const hasDraw =
+          state.participants.length >= 3 &&
+          state.participants.every((p) => typeof state.assignments[p] === "string" && state.assignments[p]);
+
+        if (!hasDraw) {
+          assignmentsCard.classList.add("hidden");
+          participantsList.innerHTML = "";
+          return;
+        }
+
+        assignmentsCard.classList.remove("hidden");
+        participantsList.innerHTML = "";
+
+        state.participants.forEach((giver) => {
+          const receiver = state.assignments[giver];
+          const link = buildPrivateUrl(giver, receiver);
+          const hasPin = Boolean(pins[giver]);
+          const isUnlocked = unlockedParticipants.has(giver);
+
+          const box = document.createElement("div");
+          box.className = "participant-box";
+
+          const top = document.createElement("div");
+          top.className = "participant-top";
+
+          const title = document.createElement("div");
+          title.className = "participant-name";
+          title.textContent = giver;
+
+          const copyBtn = document.createElement("button");
+          copyBtn.type = "button";
+          copyBtn.className = "secondary";
+          copyBtn.textContent = "Copiar enlace privado";
+          copyBtn.addEventListener("click", async () => {
+            try {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(link);
+              } else {
+                const temp = document.createElement("textarea");
+                temp.value = link;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand("copy");
+                document.body.removeChild(temp);
+              }
+              copyBtn.textContent = "¡Enlace copiado!";
+              setTimeout(() => {
+                copyBtn.textContent = "Copiar enlace privado";
+              }, 1800);
+            } catch (_) {
+              copyBtn.textContent = "Copia el enlace de abajo";
+            }
+          });
+
+          top.appendChild(title);
+          top.appendChild(copyBtn);
+          box.appendChild(top);
+
+          const linkInfo = document.createElement("div");
+          linkInfo.className = "link-preview";
+          linkInfo.textContent = link;
+          box.appendChild(linkInfo);
+
+          const pinArea = document.createElement("div");
+          pinArea.className = "pin-area";
+
+          const cardMsg = document.createElement("div");
+          cardMsg.className = "alert hidden";
+
+          if (isUnlocked && hasPin) {
+            const reveal = document.createElement("div");
+            reveal.className = "reveal-box";
+
+            const caption = document.createElement("div");
+            caption.className = "muted-small";
+            caption.textContent = giver + ", te tocó regalarle a:";
+
+            const targetEl = document.createElement("div");
+            targetEl.className = "reveal-target";
+            targetEl.textContent = receiver;
+
+            const lockBtn = document.createElement("button");
+            lockBtn.type = "button";
+            lockBtn.className = "secondary";
+            lockBtn.textContent = "Ocultar y bloquear de nuevo";
+            lockBtn.addEventListener("click", () => {
+              unlockedParticipants.delete(giver);
+              renderAssignments();
+            });
+
+            reveal.appendChild(caption);
+            reveal.appendChild(targetEl);
+            reveal.appendChild(lockBtn);
+            pinArea.appendChild(reveal);
+          } else if (!hasPin) {
+            const hint = document.createElement("div");
+            hint.className = "muted-small";
+            hint.textContent = "Crea y confirma un PIN secreto de 4 dígitos para proteger esta tarjeta:";
+
+            const inputsRow = document.createElement("div");
+            inputsRow.className = "pin-inputs";
+
+            const p1 = document.createElement("input");
+            p1.type = "password";
+            p1.inputMode = "numeric";
+            p1.maxLength = 4;
+            p1.pattern = "\\d{4}";
+            p1.placeholder = "PIN (4)";
+            p1.setAttribute("aria-label", "Crear PIN de 4 dígitos para " + giver);
+
+            const p2 = document.createElement("input");
+            p2.type = "password";
+            p2.inputMode = "numeric";
+            p2.maxLength = 4;
+            p2.pattern = "\\d{4}";
+            p2.placeholder = "Confirmar";
+            p2.setAttribute("aria-label", "Confirmar PIN de 4 dígitos para " + giver);
+
+            const saveBtn = document.createElement("button");
+            saveBtn.type = "button";
+            saveBtn.className = "primary";
+            saveBtn.textContent = "Guardar PIN y ver";
+            saveBtn.addEventListener("click", () => {
+              const v1 = p1.value.trim();
+              const v2 = p2.value.trim();
+              hideMessage(cardMsg);
+
+              if (!isValidPin(v1)) {
+                showMessage(cardMsg, "El PIN debe tener exactamente 4 dígitos numéricos.", "error");
+                return;
+              }
+              if (v1 !== v2) {
+                showMessage(cardMsg, "Los dos PIN no coinciden. Inténtalo de nuevo.", "error");
+                return;
+              }
+
+              pins[giver] = hashPin(v1, giver);
+              savePins();
+              unlockedParticipants.add(giver);
+              renderAssignments();
+            });
+
+            inputsRow.appendChild(p1);
+            inputsRow.appendChild(p2);
+            inputsRow.appendChild(saveBtn);
+            pinArea.appendChild(hint);
+            pinArea.appendChild(inputsRow);
+            pinArea.appendChild(cardMsg);
+          } else {
+            const hint = document.createElement("div");
+            hint.className = "muted-small";
+            hint.textContent = "Tarjeta bloqueada con PIN. Ingresa tus 4 dígitos para ver tu asignación:";
+
+            const inputsRow = document.createElement("div");
+            inputsRow.className = "pin-inputs";
+
+            const unlockInput = document.createElement("input");
+            unlockInput.type = "password";
+            unlockInput.inputMode = "numeric";
+            unlockInput.maxLength = 4;
+            unlockInput.pattern = "\\d{4}";
+            unlockInput.placeholder = "Tu PIN";
+            unlockInput.setAttribute("aria-label", "Ingresar PIN de 4 dígitos para " + giver);
+
+            const unlockBtn = document.createElement("button");
+            unlockBtn.type = "button";
+            unlockBtn.className = "primary";
+            unlockBtn.textContent = "Desbloquear";
+            unlockBtn.addEventListener("click", () => {
+              const val = unlockInput.value.trim();
+              hideMessage(cardMsg);
+
+              if (!isValidPin(val)) {
+                showMessage(cardMsg, "Ingresa tu PIN de 4 dígitos.", "error");
+                return;
+              }
+              if (hashPin(val, giver) !== pins[giver]) {
+                showMessage(cardMsg, "PIN incorrecto.", "error");
+                return;
+              }
+
+              unlockedParticipants.add(giver);
+              renderAssignments();
+            });
+
+            inputsRow.appendChild(unlockInput);
+            inputsRow.appendChild(unlockBtn);
+            pinArea.appendChild(hint);
+            pinArea.appendChild(inputsRow);
+            pinArea.appendChild(cardMsg);
+          }
+
+          box.appendChild(pinArea);
+          participantsList.appendChild(box);
+        });
+      }
+
+      function renderOrganizer() {
+        renderChips();
+        renderAssignments();
+      }
+
+      function getHashToken() {
+        const h = window.location.hash || "";
+        const match = h.match(/^#to=(.+)$/);
+        return match ? decodeURIComponent(match[1]) : null;
+      }
+
+      function renderPrivateView() {
+        const token = getHashToken();
+        if (!token) {
+          activePrivatePayload = null;
+          privateLinkView.classList.add("hidden");
+          organizerView.classList.remove("hidden");
+          renderOrganizer();
+          return;
+        }
+
+        const payload = decodePayload(token);
+        organizerView.classList.add("hidden");
+        privateLinkView.classList.remove("hidden");
+        hideMessage(privateMsg);
+
+        if (!payload) {
+          activePrivatePayload = null;
+          privateGreeting.textContent = "El enlace privado no es válido o está incompleto.";
+          privateSetupBox.classList.add("hidden");
+          privateUnlockBox.classList.add("hidden");
+          privateRevealBox.classList.add("hidden");
+          return;
+        }
+
+        activePrivatePayload = payload;
+        privateGreeting.textContent = "Hola " + payload.giver + ", este enlace es privado para ti.";
+
+        const hasPin = Boolean(pins[payload.giver]);
+        const isUnlocked = unlockedParticipants.has(payload.giver);
+
+        if (isUnlocked && hasPin) {
+          privateSetupBox.classList.add("hidden");
+          privateUnlockBox.classList.add("hidden");
+          privateRevealBox.classList.remove("hidden");
+          privateTargetName.textContent = payload.receiver;
+        } else if (!hasPin) {
+          privateSetupBox.classList.remove("hidden");
+          privateUnlockBox.classList.add("hidden");
+          privateRevealBox.classList.add("hidden");
+          privPin1.value = "";
+          privPin2.value = "";
+        } else {
+          privateSetupBox.classList.add("hidden");
+          privateUnlockBox.classList.remove("hidden");
+          privateRevealBox.classList.add("hidden");
+          privUnlockPin.value = "";
+        }
+      }
+
+      addNameBtn.addEventListener("click", addParticipant);
+      nameInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          addParticipant();
+        }
+      });
+
+      drawBtn.addEventListener("click", performDraw);
+      resetAllBtn.addEventListener("click", resetAll);
+
+      privSavePinBtn.addEventListener("click", () => {
+        if (!activePrivatePayload) return;
+        hideMessage(privateMsg);
+        const v1 = privPin1.value.trim();
+        const v2 = privPin2.value.trim();
+
+        if (!isValidPin(v1)) {
+          showMessage(privateMsg, "El PIN debe tener exactamente 4 dígitos numéricos.", "error");
+          return;
+        }
+        if (v1 !== v2) {
+          showMessage(privateMsg, "Los dos PIN no coinciden. Vuelve a intentarlo.", "error");
+          return;
+        }
+
+        pins[activePrivatePayload.giver] = hashPin(v1, activePrivatePayload.giver);
+        savePins();
+        unlockedParticipants.add(activePrivatePayload.giver);
+        renderPrivateView();
+      });
+
+      privUnlockBtn.addEventListener("click", () => {
+        if (!activePrivatePayload) return;
+        hideMessage(privateMsg);
+        const val = privUnlockPin.value.trim();
+
+        if (!isValidPin(val)) {
+          showMessage(privateMsg, "Ingresa tu PIN de 4 dígitos.", "error");
+          return;
+        }
+        if (hashPin(val, activePrivatePayload.giver) !== pins[activePrivatePayload.giver]) {
+          showMessage(privateMsg, "PIN incorrecto.", "error");
+          return;
+        }
+
+        unlockedParticipants.add(activePrivatePayload.giver);
+        renderPrivateView();
+      });
+
+      privLockBtn.addEventListener("click", () => {
+        if (!activePrivatePayload) return;
+        unlockedParticipants.delete(activePrivatePayload.giver);
+        renderPrivateView();
+      });
+
+      goOrganizerBtn.addEventListener("click", () => {
+        if (window.location.hash) {
+          history.replaceState(null, "", window.location.href.split("#")[0]);
+        }
+        renderPrivateView();
+      });
+
+      window.addEventListener("hashchange", renderPrivateView);
+
+      loadState();
+      renderPrivateView();
+    })();
+  </script>
+</body>
+</html>
